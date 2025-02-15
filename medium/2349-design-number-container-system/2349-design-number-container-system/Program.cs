@@ -1,4 +1,6 @@
-﻿NumberContainers nc = new NumberContainers();
+﻿using System.Runtime.InteropServices;
+
+NumberContainers nc = new NumberContainers();
 nc.Find(10); // There is no index that is filled with number 10. Therefore, we return -1.
 nc.Change(2, 10); // Your container at index 2 will be filled with number 10.
 nc.Change(1, 10); // Your container at index 1 will be filled with number 10.
@@ -10,16 +12,26 @@ nc.Find(10); // Number 10 is at the indices 2, 3, and 5. The smallest index that
 
 public class NumberContainers
 {
+    private List<int> numbers;
     public NumberContainers()
     {
+        numbers = new List<int>();
     }
 
     public void Change(int index, int number)
     {
+        var numberSpan = CollectionsMarshal.AsSpan(numbers);
+
+        if (index < 0 || index > numberSpan.Length)
+            return;
+        numberSpan[index] = number;
     }
 
     public int Find(int number)
     {
-        return 0;
+        var numberSpan = CollectionsMarshal.AsSpan(numbers);
+        if (!numberSpan.IsEmpty)
+            return -1;
+        return numberSpan.IndexOf(number);
     }
 }
