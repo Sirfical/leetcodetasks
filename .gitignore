@@ -482,3 +482,4 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/medium/2349-design-number-container-system /2349-design-number-container-system.sln
