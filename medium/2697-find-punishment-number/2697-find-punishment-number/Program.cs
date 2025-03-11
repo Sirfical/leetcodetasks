@@ -1,20 +1,39 @@
 ﻿public class Solution {
-    public int PunishmentNumber(int n)
+    static bool CanPartition(string s, int target)
     {
-        if (n is < 1 or > 1000)
-            return -1;
-        int res = 0;
-        int m = 1;
-        for (int i = 0; i <= n; i++)
-        {
-            
-        }
-        
-        // Create array[n] with x^n [1, 4, 9, 16...]
-        // Foreach by array where x^n.ToString() if (x^n).Length == 1 - x^n to int.
-        // -> else for (int j = 1; j < x^n.Length; j)
-        // 1 part before j 2 part after j if sum ==  
+        int n = s.Length;
+        bool[] dp = new bool[n + 1];
+        dp[0] = true; // Базовый случай: пустая строка
 
-        return res;
+        for (int i = 0; i < n; i++)
+        {
+            if (!dp[i]) continue; // Если сюда не добрались, пропускаем
+            int num = 0;
+            for (int j = i; j < n; j++)
+            {
+                num = num * 10 + (s[j] - '0'); // Формируем число
+                if (num > target) break; // Если уже больше i — нет смысла продолжать
+                if (num == target || dp[j + 1]) dp[j + 1] = true;
+            }
+        }
+
+        return dp[n]; // Возможно ли разбиение
+    }
+
+    static bool IsValid(int i)
+    {
+        string squared = (i * i).ToString();
+        return CanPartition(squared, i);
+    }
+
+    public int GetPunishmentNumber(int n)
+    {
+        int sum = 0;
+        for (int i = 1; i <= n; i++)
+        {
+            if (IsValid(i))
+                sum += i * i;
+        }
+        return sum;
     }
 }
